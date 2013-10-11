@@ -241,29 +241,29 @@ def BatchPreprocessing( WFName,
         in the shell
     """
 
-    """ 
-      Parse Csv File
-    """
     listOfDictionaries = []
-    f = open( listOfDictionariesFilename, 'r')
-    labels = [ 'baselineImage', 'labelMap', 'additionalImages', 'brainMask' ]
 
-    import csv
-    data = csv.DictReader( f, labels, delimiter=',')
-    for lineDict in data:
-        print "line..."
-        print lineDict
-        listOfDictionaries.append( lineDict )
 
-    subjectCount = 1
-    for singleSubject in listOfDictionaries:
-        PreprocessingMALF( WFName + str( subjectCount ),
-                           singleSubject, 
-                           atlasFilename,
-                           outputDirectory )
-        subjectCount = subjectCount + 1
+    import ast
+    with open( listOfDictionariesFilename ) as f:
+        for line in f:
+            listOfDictionaries.append( ast.literal_eval( line ) )
 
-        
+    '''
+    print and check read-in dictionaries
+    '''
+    for line in listOfDictionaries:
+        for key in line.iterkeys():
+            print "( {0}, {1} )".format( key, line[key] )
+    from sets import Set
+    import sys
+    requiredInput = Set( [ 'baselineImage', 'labelMap', 'brainMask' ] )
+
+    if not Set( line.iterkeys() ).issuperset( requiredInput ):
+        print "Input specification requires (" + str( requiredInput ) + ")."
+        print "Following element(s) seem(s) missing:"
+        print requiredInput.difference( Set( line.iterkeys() ) )
+        sys.exit(0)
 
 
 def UnitTest()    :
