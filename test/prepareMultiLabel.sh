@@ -3,5 +3,5 @@ export PATH=/ipldev/scratch/eunyokim/src/BRAINS201308/buildNamic/UKF-build/ukf/b
 
 python ../src/nipype/prepareMultiLabel.py --workflowName "TEST" \
   --inputAtlas /Shared/sinapse/scratch/eunyokim/src/BRAINS201308/build/ReferenceAtlas-build/Atlas/Atlas_20130711/template_t1_clipped.nii.gz \
-  --outputDirectory ./TestOutput/
+  --outputDirectory ./TestOutput/ \
   --inputListFilename testList.csv \

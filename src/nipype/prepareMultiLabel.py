@@ -1,8 +1,11 @@
 ###############################################################################
 # Author: Eun Young (Regina) Kim
 
+
 # export PYTHONPATH=/ipldev/scratch/eunyokim/src/BRAINS201308/BRAINSTools/AutoWorkup/:/ipldev/scratch/eunyokim/src/nipype/nipype-0.8:/ipldev/scratch/eunyokim/src/BRAINS201308/build/lib:
 # export PATH=/ipldev/scratch/eunyokim/src/BRAINS201308/buildNamic/UKF-build/ukf/bin/:/ipldev/scratch/eunyokim/src/BRAINS201308/build/bin/:$PATH
+
+## TODO Change "OutputDir" --> . so that duplicate directories of Workflow and OutputDir created.
 
 def ReconstructDictionary( inputKeys,
                            inputElements ):
@@ -264,6 +267,16 @@ def BatchPreprocessing( WFName,
         print "Following element(s) seem(s) missing:"
         print requiredInput.difference( Set( line.iterkeys() ) )
         sys.exit(0)
+    
+    count = 1
+    for singleSubject in listOfDictionaries:
+        print "*** Process " 
+        print singleSubject
+        print "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+        PreprocessingMALF( WFName + "_" + str(count),
+                           singleSubject, 
+                           atlasFilename, 
+                           outputDirectory + "_" + str(count) ) 
 
 
 def UnitTest()    :
