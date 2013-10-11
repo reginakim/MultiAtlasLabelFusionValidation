@@ -276,7 +276,8 @@ def BatchPreprocessing( WFName,
         PreprocessingMALF( WFName + "_" + str(count),
                            singleSubject, 
                            atlasFilename, 
-                           outputDirectory + "_" + str(count) ) 
+                           outputDirectory ) 
+        count = count +1
 
 
 def UnitTest()    :
