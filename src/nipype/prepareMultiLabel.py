@@ -81,6 +81,9 @@ def WarpSubjectToAtlas( WFName,
 
     WarpToAtlasWF.add_nodes( [BFitSubjectToAtlasND] )
 
+    '''
+    warp corresponding images
+    '''
     ResampleND = pe.Node( interface=BRAINSResample(), name="ResampleToAtlas" )
     ResampleND.inputs.interpolationMode = "Linear"
     ResampleND.inputs.referenceVolume = inputAtlasFilename
@@ -91,6 +94,18 @@ def WarpSubjectToAtlas( WFName,
                                ResampleND, 'warpTransform')
 
     ResampleND.iterables = ( 'inputVolume', list( inputDictionaries[ 'additionalImages' ] ) )
+
+    '''
+    warp corresponding label image
+    '''
+    ResampleLabelND = pe.Node( interface=BRAINSResample(), name="ResampleLabelToAtlas" )
+    ResampleLabelND.inputs.interpolationMode = "NearestNeighbor"
+    ResampleLabelND.inputs.referenceVolume = inputAtlasFilename
+    ResampleLabelND.inputs.outputVolume = "subjectToAtlasLabelMap.nii.gz"
+    ResampleLabelND.inputs.pixelType = 'int'
+    WarpToAtlasWF.connect( BFitSubjectToAtlasND, 'outputTransform', 
+                           ResampleLabelND, 'warpTransform')
+    ResampleLabelND.inputs.inputVolume = inputDictionaries['labelMap']
 
     WarpToAtlasWF.write_graph()
     WarpToAtlasWF.run()
